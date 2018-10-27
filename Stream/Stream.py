@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import time
 
 
 class Stream:
@@ -14,21 +15,14 @@ class Stream:
 
     # 报文长度列表
     def pkt_size(self):
-        if self._pkt_size_list is not None:
-            return np.array(self._pkt_size_list)
-        self._pkt_size_list = []
-        for p in self.packets:
-            self._pkt_size_list.append(p.length)
+        self._make_pkt_list()
         return pd.Series(self._pkt_size_list).astype('int')
 
-    # 报文到达间隔列表
+    # 报文到达间隔列表(纳秒)
     def pkt_iat(self):
-        if self._pkt_time_list is not None:
-            return np.diff(np.array(self._pkt_time_list))
-        self._pkt_time_list = []
-        for p in self.packets:
-            self._pkt_time_list.append(p.time)
-        return np.diff(np.array(self._pkt_time_list))
+        self._make_pkt_list()
+        tmp_time_list = map(lambda x: int(x.timestamp()*1000000), self._pkt_time_list)
+        return np.diff(np.array(list(tmp_time_list)))
 
     # 报文到达速率（报文数）
     def pkt_num_rate(self, interval=1000):

@@ -13,12 +13,12 @@ stream_ext = StreamExtractor(packet_list)
 
 stream_list = stream_ext.ex_tcp_stream()
 
-stream = stream_list[1]
+stream = stream_list[2]
 
-pkt_size = stream.pkt_size()
-
-print(describe(pkt_size))
+pkt_size = stream.pkt_iat()
+print(pkt_size)
+# print(describe(pkt_size))
 
 # 报文大小分布直方图
-pkt_size.hist(grid=True, bins=50, rwidth=0.9).plot()
-plt.show()
+# pkt_size.hist(grid=True, bins=50, rwidth=0.9).plot()
+# plt.show()
